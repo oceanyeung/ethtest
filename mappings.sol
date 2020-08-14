@@ -44,7 +44,7 @@ contract HelloWorld{
         
         for (uint i=0; i < people.length; i++) {
             if (people[i].creator == sender) {
-                indexList[i] = i;
+                indexList[count] = i;
                 count++;
             }
         }
