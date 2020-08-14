@@ -11,7 +11,6 @@ contract HelloWorld{
     }
     
     Person [] private people;
-    mapping (address => uint) private recentIndex;
 
     function createPerson(string memory name, uint age, uint height) public {
         address creator = msg.sender;
@@ -22,18 +21,11 @@ contract HelloWorld{
         newPerson.age = age;
         newPerson.height = height;
         
-        uint index = people.push(newPerson);
-        recentIndex[creator] = index;
+        people.push(newPerson);
+
     }
-    
-    function getPerson(uint index) public view returns(string memory name, uint age, uint height) {
+    function getPerson(uint index) public view returns(string memory name, uint age, uint height){
         assert(index < people.length);
         return (people[index].name, people[index].age, people[index].height);
-    }
-    
-    function getLastAdded() public view returns(uint lastIndex, string memory name, uint age, uint height) {
-        uint index = recentIndex[msg.sender] - 1;
-        assert(index >= 0 && index < people.length);
-        return (index, people[index].name, people[index].age, people[index].height);
     }
 }
