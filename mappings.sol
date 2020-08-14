@@ -25,7 +25,7 @@ contract HelloWorld{
 
     }
     function getPerson(uint index) public view returns(string memory name, uint age, uint height){
-        assert(index < people.length);
+        require(index < people.length);
         return (people[index].name, people[index].age, people[index].height);
     }
 }
