@@ -26,9 +26,10 @@ contract HelloWorld{
         recentIndex[creator] = index;
     }
     
-    function getPerson(uint index) public view returns(string memory name, uint age, uint height) {
+    function getPerson(uint index) public view returns(address creator, string memory name, uint age, uint height) {
         require(index < people.length);
-        return (people[index].name, people[index].age, people[index].height);
+        Person memory person = people[index];
+        return (person.creator, person.name, person.age, person.height);
     }
     
     function getLastAdded() public view returns(uint lastIndex, string memory name, uint age, uint height) {
