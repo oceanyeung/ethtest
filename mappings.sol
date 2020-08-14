@@ -27,13 +27,13 @@ contract HelloWorld{
     }
     
     function getPerson(uint index) public view returns(string memory name, uint age, uint height) {
-        assert(index < people.length);
+        require(index < people.length);
         return (people[index].name, people[index].age, people[index].height);
     }
     
     function getLastAdded() public view returns(uint lastIndex, string memory name, uint age, uint height) {
         uint index = recentIndex[msg.sender] - 1;
-        assert(index >= 0 && index < people.length);
+        require(index >= 0 && index < people.length);
         return (index, people[index].name, people[index].age, people[index].height);
     }
 }
