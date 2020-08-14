@@ -36,4 +36,23 @@ contract HelloWorld{
         assert(index >= 0 && index < people.length);
         return (index, people[index].name, people[index].age, people[index].height);
     }
+
+    function getAllPeople() public view returns(uint[] memory addedIndex) {
+        address sender = msg.sender;
+        uint count = 0;
+        uint[] memory indexList = new uint[](people.length);
+        
+        for (uint i=0; i < people.length; i++) {
+            if (people[i].creator == sender) {
+                indexList[i] = i;
+                count++;
+            }
+        }
+        
+        uint[] memory results = new uint[](count);
+        for (uint i=0; i < count; i++) {
+            results[i] = indexList[i];
+        }
+        return results;
+    }
 }
