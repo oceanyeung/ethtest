@@ -9,10 +9,24 @@ contract HelloWorld{
       uint height;
       address creator;
     }
+    
+    // Doubly linked list to track all the address that has created a person
+    address owner;
 
     mapping (address => Person) private people;
+    address[] creators;
+    uint creatorsCount;
     
     event personUpdated(address creator, string name, uint age, uint height);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+    
+    constructor() public {
+        owner = msg.sender;
+    }
     
     function createPerson(string memory name, uint age, uint height) public {
         Person memory person;
@@ -23,7 +37,13 @@ contract HelloWorld{
         person.name = name;
         person.age = age;
         person.height = height;
-        
+
+        if (people[msg.sender].creator != msg.sender) {
+            // record does not exist in people yet, so can increase count
+            creators.push(creator);
+            creatorsCount++;
+        }
+        person.id = creatorsCount;
         people[msg.sender] = person;
     }
     
@@ -48,5 +68,13 @@ contract HelloWorld{
     function getPerson() public view returns(string memory name, uint age, uint height){
         address creator = msg.sender;
         return (people[creator].name, people[creator].age, people[creator].height);
+    }
+    
+    function getAllPeople() view public onlyOwner returns(uint[] memory peopleIds) {
+        uint[] memory ids = new uint[](creatorsCount);
+        for (uint32 i=0; i < creatorsCount; i++) {
+            ids[i] = people[creators[i]].id;
+        }
+        return ids;
     }
 }
