@@ -13,11 +13,9 @@ contract HelloWorld is Ownable, Destroyable, hasCost {
       address creator;
     }
     
-    // Doubly linked list to track all the address that has created a person
-
     mapping (address => Person) private people;
-    address[] creators;
-    uint creatorsCount;
+    address[] creators; // Array to track all creators in the mapping
+    uint creatorsCount; // The total number of creators in the mapping
     
     uint public balance;
     
