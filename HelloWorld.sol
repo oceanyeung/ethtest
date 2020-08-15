@@ -1,23 +1,9 @@
 pragma solidity 0.5.12;
+import './Destroyable.sol';
+import './Ownable.sol';
+import './HasCost.sol';
 
-contract Destroyable {
-    address private owner;
-    
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-    
-    constructor() public {
-        owner = msg.sender;
-    }
-    
-    function close() public onlyOwner {
-        selfdestruct(msg.sender);
-    }
-}
-
-contract HelloWorld is Destroyable{
+contract HelloWorld is Ownable, Destroyable, hasCost {
 
     struct Person {
       uint id;
@@ -33,10 +19,14 @@ contract HelloWorld is Destroyable{
     address[] creators;
     uint creatorsCount;
     
+    uint public balance;
+    
     event personUpdated(address creator, string name, uint age, uint height);
 
-    function createPerson(string memory name, uint age, uint height) public {
+    function createPerson(string memory name, uint age, uint height) public payable costs(1 ether){
         Person memory person;
+        
+        balance += msg.value;
         
         address creator = msg.sender;
 
@@ -83,5 +73,12 @@ contract HelloWorld is Destroyable{
             ids[i] = people[creators[i]].id;
         }
         return ids;
+    }
+    
+    function withdrawAll() public onlyOwner returns(uint) {
+        uint toTransfer = balance;
+        balance = 0;
+        msg.sender.transfer(toTransfer);
+        return toTransfer;
     }
 }
