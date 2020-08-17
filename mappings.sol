@@ -1,3 +1,4 @@
+  
 pragma solidity 0.5.12;
 
 contract HelloWorld{
@@ -12,7 +13,7 @@ contract HelloWorld{
 
     mapping (address => Person) private people;
     
-    event personUpdated(address creator, string name, uint age, uint height);
+    event personUpdated(address creator, string oldName, string newName, uint oldAge, uint newAge, uint oldHeight, uint newHeight);
     
     function createPerson(string memory name, uint age, uint height) public {
         Person memory person;
@@ -31,6 +32,10 @@ contract HelloWorld{
         address sender = msg.sender;
         require(people[sender].creator == sender);
         
+        string memory oldName = people[sender].name;
+        uint oldAge = people[sender].age;
+        uint oldHeight = people[sender].height;
+        
         people[sender].name = name;
         people[sender].age = age;
         people[sender].height = height;
@@ -42,7 +47,7 @@ contract HelloWorld{
             && people[sender].height == height
         );
         
-        emit personUpdated(sender, name, age, height);
+        emit personUpdated(sender, oldName, name, oldAge, age, oldHeight, height);
     }
     
     function getPerson() public view returns(string memory name, uint age, uint height){
