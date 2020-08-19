@@ -39,12 +39,10 @@ contract ERC20 is Ownable {
         return _balances[account];
     }
     
-    // I changed it from mint to approve since that's what's in the ERC-20 specifications
-    function approve(address account, uint256 amount) public onlyOwner returns (bool) {
+    function mint(address account, uint256 amount) public onlyOwner returns (bool) {
         require (account != address(0));
         _balances[account] += amount;
         _totalSupply += amount;
-        emit Approval(owner, account, amount);
     }
     
     function transfer(address to, uint256 amount) public returns (bool) {
